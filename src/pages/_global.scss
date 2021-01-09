@@ -1,0 +1,31 @@
+@import "~bootstrap/scss/bootstrap";
+
+.contact-list-wrapper {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+  .search-filter {
+    display: flex;
+    width: 100%;
+  }
+
+  .content-list {
+    ol {
+      margin-left: 0;
+      li {
+        list-style-type: none;
+      }
+    }
+  }
+}
+footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  margin-top: 2rem;
+  margin-bottom: 0.5rem;
+  width: 100%;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+}

@@ -1,0 +1,35 @@
+.contactCard-wrapper {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+
+  .contact-image {
+    width: 40px;
+    height: 40px;
+    margin: 0 2% 0 0;
+  }
+  .data-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    width: 100%;
+    .attr-container {
+      display: flex;
+      flex-direction: column;
+      width: 20%;
+      .label {
+        font-size: 10px;
+      }
+      .value {
+        font-size: 14px;
+      }
+    }
+    .actions-container {
+      width: 20%;
+      display: flex;
+      align-content: center;
+      justify-content: flex-end;
+    }
+  }
+}
