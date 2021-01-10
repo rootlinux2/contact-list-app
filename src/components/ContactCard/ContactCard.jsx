@@ -3,6 +3,7 @@ import { Form, Button, Row, Col } from "react-bootstrap"
 import Axios from "axios"
 import { toast } from "react-toastify"
 import { BsPencilSquare, BsFillXSquareFill } from "react-icons/bs"
+import Image from '../Image/Image'
 import "./styles.scss"
 
 const ContactCard = ({
@@ -72,10 +73,11 @@ const ContactCard = ({
       }`}
       onDoubleClick={() => setIsEdditable(!isEdditable)}
     >
-      <img
-        src="/contacts/masculino.png"
+      <Image
+        src="contacts/masculino.png"
         className="rounded-circle contact-image"
-      ></img>
+        debug
+      ></Image>
       {isEdditable ? (
         <Form>
           <Row>

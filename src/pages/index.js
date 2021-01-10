@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react"
 
 import Layout from "../components/layout"
 import SEO from "../components/seo"
-import "./_global.scss"
 import Axios from "axios"
 import {
   Form,
@@ -28,6 +27,7 @@ const IndexPage = () => {
   const [showAddConatct, setShowAddConatct] = useState(false)
 
   useEffect(() => {
+    console.log('USAS:ALSAKSKAS')
     setIsLoading(true)
     Axios.get(`${process.env.GATSBY_API_URL}/contact`).then(response => {
       setConstacts(response.data.docs)
