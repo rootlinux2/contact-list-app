@@ -52,58 +52,61 @@ const IndexPage = () => {
   return (
     <Layout>
       <SEO title="Home" />
-      {isLoading ? (
-        <>
-          <Spinner animation="grow" variant="primary" />
-          <Spinner animation="grow" variant="secondary" />
-          <Spinner animation="grow" variant="success" />
-          <Spinner animation="grow" variant="danger" />
-          <Spinner animation="grow" variant="warning" />
-          <Spinner animation="grow" variant="info" />
-          <Spinner animation="grow" variant="dark" />
-        </>
-      ) : (
-        <div className="contact-list-wrapper">
-          <div className="search-filter bg-light">
-            <Row className="w-100 d-flex align-content-center">
-              <Col xs={11}>
-                <Navbar bg="light" expand="md">
-                  <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                  <Navbar.Collapse id="basic-navbar-nav">
-                    <Form inline className="w-100">
-                      <Form.Label htmlFor="searchfilter" srOnly>
-                        Search
-                      </Form.Label>
-                      <InputGroup className="mb-2 w-100">
-                        <InputGroup.Prepend>
-                          <InputGroup.Text>
-                            <RiUserSearchFill />
-                          </InputGroup.Text>
-                        </InputGroup.Prepend>
-                        <FormControl
-                          id="searchfilter"
-                          placeholder="Search"
-                          className="mr-sm-2 w-75"
-                          onChange={e => handlerFilter(e.target.value)}
-                        />
-                      </InputGroup>
-                    </Form>
-                  </Navbar.Collapse>
-                </Navbar>
-              </Col>
-              <Col xs={1}>
-                <Button
-                  variant="light"
-                  title="Add Contact"
-                  onClick={() => setShowAddConatct(true)}
-                  size="lg"
-                >
-                  <BsFillPersonPlusFill />
-                </Button>
-              </Col>
-            </Row>
-          </div>
-          <div className="content-list">
+      <div className="contact-list-wrapper">
+        <div className="search-filter bg-light">
+          <Row className="w-100 d-flex align-content-center">
+            <Col xs={11}>
+              <Navbar bg="light" expand="md">
+                <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                <Navbar.Collapse id="basic-navbar-nav">
+                  <Form inline className="w-100">
+                    <Form.Label htmlFor="searchfilter" srOnly>
+                      Search
+                    </Form.Label>
+                    <InputGroup className="mb-2 w-100">
+                      <InputGroup.Prepend>
+                        <InputGroup.Text>
+                          <RiUserSearchFill />
+                        </InputGroup.Text>
+                      </InputGroup.Prepend>
+                      <FormControl
+                        id="searchfilter"
+                        placeholder="Search"
+                        className="mr-sm-2 w-75"
+                        onChange={e => handlerFilter(e.target.value)}
+                      />
+                    </InputGroup>
+                  </Form>
+                </Navbar.Collapse>
+              </Navbar>
+            </Col>
+            <Col xs={1}>
+              <Button
+                variant="light"
+                title="Add Contact"
+                onClick={() => setShowAddConatct(true)}
+                size="lg"
+              >
+                <BsFillPersonPlusFill />
+              </Button>
+            </Col>
+          </Row>
+        </div>
+        <div className="statistics text-right">
+          <span>{`${filteredContacts.length} contacts`}</span>
+        </div>
+        <div className="content-list">
+          {isLoading ? (
+            <>
+              <Spinner animation="border" size='sm' variant="primary" />
+              <Spinner animation="border" size='sm' variant="secondary" />
+              <Spinner animation="border" size='sm' variant="success" />
+              <Spinner animation="border" size='sm' variant="danger" />
+              <Spinner animation="border" size='sm' variant="warning" />
+              <Spinner animation="border" size='sm' variant="info" />
+              <Spinner animation="border" size='sm' variant="dark" />
+            </>
+          ) : (
             <ol>
               {filteredContacts.map(c => (
                 <li key={JSON.stringify(c)}>
@@ -114,9 +117,9 @@ const IndexPage = () => {
                 </li>
               ))}
             </ol>
-          </div>
+          )}
         </div>
-      )}
+      </div>
       <Modal
         show={showAddConatct}
         onHide={() => setShowAddConatct(false)}
@@ -140,7 +143,6 @@ const IndexPage = () => {
             closeModal={() => setShowAddConatct(false)}
           />
         </Modal.Body>
-       
       </Modal>
     </Layout>
   )

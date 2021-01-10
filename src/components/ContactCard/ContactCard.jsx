@@ -57,7 +57,12 @@ const ContactCard = ({
       .catch(error => toast.error(error.message))
   }
   const handleDeleteContact = () => {
-    toast.info("Delete contact")
+    Axios.delete(`${process.env.GATSBY_API_URL}/contact/${contact._id}`)
+      .then(() => {
+        toast.success("Contact Deleted!")
+        onChange()
+      })
+      .catch(error => toast.error(error.message))
   }
 
   return (
@@ -94,7 +99,7 @@ const ContactCard = ({
                 size="sm"
               />
             </Col>
-          
+
             <Col>
               <Form.Label htmlFor="inlineFormInputAddress">Address</Form.Label>
               <Form.Control
