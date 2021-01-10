@@ -17,7 +17,7 @@ import {
   Modal,
 } from "react-bootstrap"
 import ContactCard from "../components/ContactCard/ContactCard"
-import { BsFillPersonPlusFill } from "react-icons/bs"
+import { BsFillPersonPlusFill, BsFillInfoCircleFill } from "react-icons/bs"
 import { RiUserSearchFill } from "react-icons/ri"
 
 const IndexPage = () => {
@@ -53,17 +53,17 @@ const IndexPage = () => {
     <Layout>
       <SEO title="Home" />
       <div className="contact-list-wrapper">
-        <div className="search-filter bg-light">
+        <div className="search-filter bg-dark">
           <Row className="w-100 d-flex align-content-center">
             <Col xs={11}>
-              <Navbar bg="light" expand="md">
+              <Navbar bg="dark" expand="md">
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                   <Form inline className="w-100">
                     <Form.Label htmlFor="searchfilter" srOnly>
                       Search
                     </Form.Label>
-                    <InputGroup className="mb-2 w-100">
+                    <InputGroup className="mb-2 w-100" size="sm">
                       <InputGroup.Prepend>
                         <InputGroup.Text>
                           <RiUserSearchFill />
@@ -73,6 +73,7 @@ const IndexPage = () => {
                         id="searchfilter"
                         placeholder="Search"
                         className="mr-sm-2 w-75"
+                        size="sm"
                         onChange={e => handlerFilter(e.target.value)}
                       />
                     </InputGroup>
@@ -82,7 +83,7 @@ const IndexPage = () => {
             </Col>
             <Col xs={1}>
               <Button
-                variant="light"
+                variant="dark"
                 title="Add Contact"
                 onClick={() => setShowAddConatct(true)}
                 size="lg"
@@ -90,21 +91,25 @@ const IndexPage = () => {
                 <BsFillPersonPlusFill />
               </Button>
             </Col>
+
+            <Col xs={12}>
+              <div className="statistics text-right text-white pb-2">
+              <BsFillInfoCircleFill className="mr-1"/>
+                <span>{`${filteredContacts.length} contacts`}</span>
+              </div>
+            </Col>
           </Row>
-        </div>
-        <div className="statistics text-right">
-          <span>{`${filteredContacts.length} contacts`}</span>
         </div>
         <div className="content-list">
           {isLoading ? (
             <>
-              <Spinner animation="border" size='sm' variant="primary" />
-              <Spinner animation="border" size='sm' variant="secondary" />
-              <Spinner animation="border" size='sm' variant="success" />
-              <Spinner animation="border" size='sm' variant="danger" />
-              <Spinner animation="border" size='sm' variant="warning" />
-              <Spinner animation="border" size='sm' variant="info" />
-              <Spinner animation="border" size='sm' variant="dark" />
+              <Spinner animation="border" size="sm" variant="primary" />
+              <Spinner animation="border" size="sm" variant="secondary" />
+              <Spinner animation="border" size="sm" variant="success" />
+              <Spinner animation="border" size="sm" variant="danger" />
+              <Spinner animation="border" size="sm" variant="warning" />
+              <Spinner animation="border" size="sm" variant="info" />
+              <Spinner animation="border" size="sm" variant="dark" />
             </>
           ) : (
             <ol>

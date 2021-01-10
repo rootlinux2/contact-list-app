@@ -7,9 +7,13 @@
   .search-filter {
     display: flex;
     width: 100%;
+    position: sticky;
+    top: 0;
+    padding-top: 4%;
   }
 
   .content-list {
+    padding-top: 2%;
     ol {
       margin-left: 0;
       li {
