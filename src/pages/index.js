@@ -15,38 +15,85 @@ import {
   Col,
   Modal,
 } from "react-bootstrap"
+import { toast } from "react-toastify"
 import ContactCard from "../components/ContactCard/ContactCard"
 import { BsFillPersonPlusFill, BsFillInfoCircleFill } from "react-icons/bs"
 import { RiUserSearchFill } from "react-icons/ri"
 
 const IndexPage = () => {
   const [isLoading, setIsLoading] = useState(false)
-  const [contactChange, setContactChange] = useState(false)
   const [contacts, setConstacts] = useState([])
   const [filteredContacts, setFilteredContacts] = useState([])
   const [showAddConatct, setShowAddConatct] = useState(false)
+  const [search, setSearch] = useState("")
 
   useEffect(() => {
-    console.log('USAS:ALSAKSKAS')
     setIsLoading(true)
     Axios.get(`${process.env.GATSBY_API_URL}/contact`).then(response => {
       setConstacts(response.data.docs)
       setFilteredContacts(response.data.docs)
       setIsLoading(false)
     })
-  }, [contactChange])
+  }, [])
 
-  const handlerFilter = value => {
-    const result = contacts.filter(c => {
-      if (
-        c.name.toLowerCase().includes(value.toLowerCase()) ||
-        c.address.toLowerCase().includes(value.toLowerCase()) ||
-        c.phone.toLowerCase().includes(value.toLowerCase()) ||
-        c.email.toLowerCase().includes(value.toLowerCase())
+  useEffect(() => {
+    
+   if(search.length > 0){
+
+     const result = contacts.filter(c => {
+       if (
+         c.name.toLowerCase().includes(search.toLowerCase()) ||
+         c.address.toLowerCase().includes(search.toLowerCase()) ||
+         c.phone.toLowerCase().includes(search.toLowerCase()) ||
+         c.email.toLowerCase().includes(search.toLowerCase())
+         )
+         return c
+        })
+        setFilteredContacts([...result])
+      }else{
+        setFilteredContacts([...contacts])
+      }
+    
+  }, [contacts, search])
+
+
+
+  const handleContactChange = (action, contactId) => {
+  console.log("🚀 ~ file: index.js ~ line 62 ~ handleContactChange ~ contactId", contactId)
+    if (action === "Update") {
+      Axios.get(`${process.env.GATSBY_API_URL}/contact/${contactId}`).then(
+        response => {
+          const { data } = response
+          const tmp = contacts.map(c => {
+            if (c._id === data._id) {
+              return data
+            }
+            return c
+          })
+
+          setConstacts([...tmp])
+          toast.success("Contact Updated!")
+        
+        }
       )
-        return c
-    })
-    setFilteredContacts([...result])
+    } else if(action === "Delete"){
+      const tmp = contacts.filter(c => c._id !== contactId);
+      console.log("🚀 ~ file: index.js ~ line 81 ~ handleContactChange ~ tmp", tmp.length)
+      setConstacts([...tmp])
+      toast.success("Contact Deleted!")
+    }else{
+      Axios.get(`${process.env.GATSBY_API_URL}/contact/${contactId}`).then(
+        response => {
+          const { data } = response
+          const tmp = [{...data},...contacts];
+
+          setConstacts([...tmp])
+          toast.success("Contact Created!")
+          
+        }
+      )
+    
+    }
   }
 
   return (
@@ -74,7 +121,7 @@ const IndexPage = () => {
                         placeholder="Search"
                         className="mr-sm-2 w-75"
                         size="sm"
-                        onChange={e => handlerFilter(e.target.value)}
+                        onChange={e => setSearch(e.target.value)}
                       />
                     </InputGroup>
                   </Form>
@@ -94,7 +141,7 @@ const IndexPage = () => {
 
             <Col xs={12}>
               <div className="statistics text-right text-white pb-2">
-              <BsFillInfoCircleFill className="mr-1"/>
+                <BsFillInfoCircleFill className="mr-1" />
                 <span>{`${filteredContacts.length} contacts`}</span>
               </div>
             </Col>
@@ -115,10 +162,7 @@ const IndexPage = () => {
             <ol>
               {filteredContacts.map(c => (
                 <li key={JSON.stringify(c)}>
-                  <ContactCard
-                    contact={c}
-                    onChange={() => setContactChange(!contactChange)}
-                  />
+                  <ContactCard contact={c} onChange={handleContactChange} />
                 </li>
               ))}
             </ol>
@@ -142,7 +186,7 @@ const IndexPage = () => {
               address: "",
               emaiil: "",
             }}
-            onChange={() => setContactChange(!contactChange)}
+            onChange={handleContactChange}
             toCreate
             formInline={false}
             closeModal={() => setShowAddConatct(false)}

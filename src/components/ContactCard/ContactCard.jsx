@@ -25,9 +25,9 @@ const ContactCard = ({
       phone,
       email,
     })
-      .then(() => {
-        toast.success("Contact Created!")
-        onChange()
+      .then(response => {
+        const { data } = response
+        onChange('Create', data._id)
         closeModal()
       })
       .catch(error => toast.error(error.message))
@@ -41,12 +41,12 @@ const ContactCard = ({
       email,
     })
       .then(response => {
+        const { data } = response
         if (response.status === 200) {
           setIsEdditable(false)
-          toast.success("Contact Updated!")
-          onChange()
+          onChange('Update',data._id);
         } else {
-          const { data } = response
+         
           setName(data.name)
           setPhone(data.phone)
           setAddress(data.address)
@@ -60,8 +60,8 @@ const ContactCard = ({
   const handleDeleteContact = () => {
     Axios.delete(`${process.env.GATSBY_API_URL}/contact/${contact._id}`)
       .then(() => {
-        toast.success("Contact Deleted!")
-        onChange()
+    
+        onChange('Delete', contact._id);
       })
       .catch(error => toast.error(error.message))
   }
@@ -79,7 +79,7 @@ const ContactCard = ({
         debug
       ></Image>
       {isEdditable ? (
-        <Form>
+        <Form className="pr-3">
           <Row>
             <Col>
               <Form.Label htmlFor="inlineFormInputName">Name</Form.Label>
