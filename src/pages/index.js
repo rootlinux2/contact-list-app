@@ -77,8 +77,7 @@ const IndexPage = () => {
         }
       )
     } else if(action === "Delete"){
-      const tmp = contacts.filter(c => c._id !== contactId);
-      console.log("🚀 ~ file: index.js ~ line 81 ~ handleContactChange ~ tmp", tmp.length)
+      const tmp = contacts.filter(c => c._id !== contactId);     
       setConstacts([...tmp])
       toast.success("Contact Deleted!")
     }else{
