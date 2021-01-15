@@ -1,12 +1,22 @@
-import React, { useState } from "react"
-import { Form, Button, Row, Col } from "react-bootstrap"
+import React, { useState, useEffect } from "react"
+// import { Form } from "react-bootstrap"
 import Axios from "axios"
 import { toast } from "react-toastify"
-import { BsPencilSquare, BsFillXSquareFill } from "react-icons/bs"
-import Image from '../Image/Image'
+import {
+  BsPencilSquare,
+  BsFillXSquareFill,
+  BsCheckBox,
+  BsFillTrashFill,
+} from "react-icons/bs"
+import {
+  Form,
+  Input,
+  Label,
+  Text,
+  Button,
+} from "../StylesComponents/StylesComponents"
+import Image from "../Image/Image"
 import "./styles.scss"
-import styled from "styled-components"
-import Grid from "../Grid/Grid"
 
 const ContactCard = ({
   contact,
@@ -19,7 +29,27 @@ const ContactCard = ({
   const [phone, setPhone] = useState(contact.phone || "")
   const [address, setAddress] = useState(contact.address || "")
   const [email, setEmail] = useState(contact.email || "")
+  const [errors, setErrors] = useState({})
 
+  useEffect(() => {
+    const err = {}
+    const emailFormat = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/.test(
+      String(email).toLowerCase()
+      )
+    
+    if (!emailFormat) {
+      err.email = "this is not avalid email!"
+    }
+    const nameFormat = /^[A-Za-z\d\s]+$/g.test(name);
+    if(!nameFormat){
+      err.name = "this is not avalid name, only letters allowed!"
+    }
+    const phoneFormat = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/.test(phone);
+    if(!phoneFormat){
+      err.phone = "this is not avalid phone!"
+    }
+    setErrors({...err});
+  }, [name, phone, address, email])
   const handleContactCreate = () => {
     Axios.post(`${process.env.GATSBY_API_URL}/contact`, {
       name,
@@ -29,7 +59,7 @@ const ContactCard = ({
     })
       .then(response => {
         const { data } = response
-        onChange('Create', data)
+        onChange("Create", data)
         closeModal()
       })
       .catch(error => toast.error(error.message))
@@ -46,9 +76,8 @@ const ContactCard = ({
         const { data } = response
         if (response.status === 200) {
           setIsEdditable(false)
-          onChange('Update',data);
+          onChange("Update", data)
         } else {
-         
           setName(data.name)
           setPhone(data.phone)
           setAddress(data.address)
@@ -62,30 +91,16 @@ const ContactCard = ({
   const handleDeleteContact = () => {
     Axios.delete(`${process.env.GATSBY_API_URL}/contact/${contact._id}`)
       .then(() => {
-    
-        onChange('Delete', contact);
+        onChange("Delete", contact)
       })
       .catch(error => toast.error(error.message))
   }
-
-  const ColumnWrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  `
-  const Button = styled.button`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-content: center;
-  `
 
   return (
     <div
       className={`contactCard-wrapper border-bottom ${
         isEdditable ? "bg-light" : ""
       }`}
-      onDoubleClick={() => setIsEdditable(!isEdditable)}
     >
       <Image
         src="contacts/masculino.png"
@@ -93,98 +108,117 @@ const ContactCard = ({
         debug
       ></Image>
       {isEdditable ? (
-        <Form className="pr-3">
-        <Grid columns={12} style={{ gridColumnGap: "10px" }}>
-        <ColumnWrapper>
-        <Form.Label htmlFor="inlineFormInputName">Name</Form.Label>
-              <Form.Control
-                className="mb-2 mx-sm-2"
-                id="inlineFormInputName"
-                value={name}
-                onChange={e => setName(e.target.value)}
-                size="sm"
-                type="text"
-                required
-              />
-        </ColumnWrapper>
-        <ColumnWrapper>
-        <Form.Label htmlFor="inlineFormInputPhone">Phone</Form.Label>
-              <Form.Control
-                className="mb-2 mx-sm-2"
-                id="inlineFormInputPhone"
-                value={phone}
-                onChange={e => setPhone(e.target.value)}
-                size="sm"
-                type="text"
-                required
-              />
-        </ColumnWrapper>
-        <ColumnWrapper>
-        <Form.Label htmlFor="inlineFormInputAddress">Address</Form.Label>
-              <Form.Control
-                className="mb-2 mx-sm-2"
-                id="inlineFormInputAddress"
-                value={address}
-                onChange={e => setAddress(e.target.value)}
-                size="sm"
-                type="text"
-                required
-              />
-        </ColumnWrapper>
-        <ColumnWrapper>
-        <Form.Label htmlFor="inlineFormInputEmail">Email</Form.Label>
-              <Form.Control
-                className="mb-2 mr-sm-2"
-                id="inlineFormInputEmail"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                size="sm"
-                type="text"
-                required
-              />
-        </ColumnWrapper>
-        <ColumnWrapper>
-        <Form.Label htmlFor="inlineFormInputEmail">Email</Form.Label>
-        {toCreate ? (
-                <>
-                  <Button
-                    className="ml-1"
-                    size="sm"
-                    variant="primary"
-                    onClick={() => handleContactCreate()}
-                  >
-                    Create
-                  </Button>
-                  <Button
-                    className="ml-1"
-                    size="sm"
-                    variant="danger"
-                    onClick={() => closeModal()}
-                  >
-                    Cancel
-                  </Button>
-                </>
-              ) : (
-                <>
-                  <Button
-                    className="btn btn-dark btn-light btn-lg"
-                   
-                    onClick={() => handleContactUpdate()}
-                  >
-                    Save
-                  </Button>
-                  <Button
-                    className="btn btn-dark btn-light btn-lg"
-                  
-                    onClick={() => setIsEdditable(false)}
-                  >
-                    Cancel
-                  </Button>
-                </>
-              )}
-        </ColumnWrapper>         
-         
-      </Grid>
+        <Form className="form-wrapper">
+          <div className="form-field">
+            <Label htmlFor="inlineFormInputName">
+              Name * {errors.name && <Text color="red">{errors.name}</Text>}
+            </Label>
+            <Input
+              className="mb-2 mx-sm-2"
+              id="inlineFormInputName"
+              border={errors.name && "1px solid red"}
+              name="name"
+              value={name}
+              onChange={e => setName(e.target.value)}
+              size="sm"
+              type="text"
+              required
+            />
+          </div>
+          <div className="form-field">
+            <Label htmlFor="inlineFormInputPhone">
+              Phone * {errors.phone && <Text color="red">{errors.phone}</Text>}
+            </Label>
+            <Input
+              className="mb-2 mx-sm-2"
+              id="inlineFormInputPhone"
+              border={errors.phone && "1px solid red"}
+              name="phone"
+              value={phone}
+              onChange={e => setPhone(e.target.value)}
+              size="sm"
+              type="text"
+              required
+            />
+          </div>
+          <div className="form-field">
+            <Label htmlFor="inlineFormInputAddress">
+              Address *{" "}
+              {errors.address && <Text color="red">{errors.address}</Text>}
+            </Label>
+            <Input
+              className="mb-2 mx-sm-2"
+              id="inlineFormInputAddress"
+              value={address}
+              border={errors.address && "1px solid red"}
+              name="address"
+              onChange={e => setAddress(e.target.value)}
+              size="sm"
+              type="text"
+              required
+            />
+          </div>
+          <div className="form-field">
+            <Label htmlFor="inlineFormInputEmail">
+              Email * {errors.email && <Text color="red">{errors.email}</Text>}
+            </Label>
+            <Input
+              className="mb-2 mr-sm-2"
+              id="inlineFormInputEmail"
+              value={email}
+              border={errors.email && "1px solid red"}
+              name="email"
+              onChange={e => {
+                console.log('eeeee: ', e.target.value)
+                setEmail(e.target.value)}}
+              size="sm"
+              type="text"
+              required
+            />
+          </div>
+          <div className="form-controls">
+            {toCreate ? (
+              <>
+                <Button
+                  className="btn btn-light btn-sm"
+                  title="Create"
+                  type="button"
+                  onClick={() => handleContactCreate()}
+                  disabled={errors && Object.keys(errors).length > 0}
+                >
+                  <BsCheckBox />
+                </Button>
+                <Button
+                  className="btn btn-light btn-sm"
+                  title="Cancel"
+                  type="button"
+                  onClick={() => closeModal()}
+                >
+                  <BsFillTrashFill/>
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button
+                  className="btn btn-success btn-sm"
+                  title="Update"
+                  type="button"
+                  onClick={() => handleContactUpdate()}
+                  disabled={errors && Object.keys(errors).length > 0}
+                >
+                  <BsCheckBox />
+                </Button>
+                <Button
+                  className="btn btn-light btn-sm"
+                  title="Cancel"
+                  type="button"
+                  onClick={() => setIsEdditable(false)}
+                >
+                  <BsFillTrashFill />
+                </Button>
+              </>
+            )}
+          </div>
         </Form>
       ) : (
         <div className="data-content">
@@ -206,14 +240,14 @@ const ContactCard = ({
           </div>
           <div className="actions-container">
             <Button
-              variant="light"
+              className="btn btn-light btn-sm"
               title="Edit"
               onClick={() => setIsEdditable(true)}
             >
               <BsPencilSquare />
             </Button>
             <Button
-              variant="light"
+              className="btn btn-light btn-sm"
               title="Delete"
               onClick={() => handleDeleteContact()}
             >

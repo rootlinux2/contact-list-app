@@ -16,7 +16,7 @@ import { toast } from "react-toastify"
 import ContactCard from "../components/ContactCard/ContactCard"
 import { BsFillPersonPlusFill, BsFillInfoCircleFill } from "react-icons/bs"
 import { RiUserSearchFill } from "react-icons/ri"
-import styled from "styled-components"
+import {Button, ColumnWrapper} from '../components/StylesComponents/StylesComponents'
 import Grid from "../components/Grid/Grid"
 
 const IndexPage = () => {
@@ -68,23 +68,12 @@ const IndexPage = () => {
       toast.success("Contact Deleted!")
     } else {
       const tmp = [{ ...contact }, ...contacts]
-
       setConstacts([...tmp])
       toast.success("Contact Created!")
     }
   }
 
-  const ColumnWrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  `
-  const Button = styled.button`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-content: center;
-  `
+
 
   return (
     <Layout>
@@ -165,6 +154,7 @@ const IndexPage = () => {
           onHide={() => setShowAddConatct(false)}
           backdrop="static"
           keyboard={false}
+          dialogClassName="modal-90w"
         >
           <Modal.Header closeButton>
             <Modal.Title>Create Contact</Modal.Title>

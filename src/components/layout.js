@@ -12,6 +12,7 @@ import { ToastContainer } from 'react-toastify';
 import styled from "styled-components"
 import 'react-toastify/dist/ReactToastify.css';
 import "./layout.css"
+import { LayoutWrapper } from "./StylesComponents/StylesComponents";
 
 const Layout = ({ children }) => {
   const data = useStaticQuery(graphql`
@@ -24,11 +25,7 @@ const Layout = ({ children }) => {
     }
   `)
 
-  const LayoutWrapper = styled.section`
-  main {
-    padding: 0 20%;   
-  }
-`
+
   return (
     <LayoutWrapper>
         <ToastContainer />
